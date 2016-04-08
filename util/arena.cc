@@ -38,7 +38,7 @@ char* Arena::AllocateFallback(size_t bytes) {
   alloc_bytes_remaining_ -= bytes;
   return result;
 }
-
+//he_ if algin =4 alloc_ptr_&11 or algin =0 alloc_ptr_&1,get current_mod
 char* Arena::AllocateAligned(size_t bytes) {
   const int align = sizeof(void*);    // We'll align to pointer size
   assert((align & (align-1)) == 0);   // Pointer size should be a power of 2
@@ -54,7 +54,7 @@ char* Arena::AllocateAligned(size_t bytes) {
     // AllocateFallback always returned aligned memory
     result = AllocateFallback(bytes);
   }
-  assert((reinterpret_cast<uintptr_t>(result) & (align-1)) == 0);
+  assert((reinterpret_cast<uintptr_t>(result) & (align-1)) == 0);//he_ detail
   return result;
 }
 

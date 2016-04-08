@@ -122,7 +122,15 @@ void CondVar::SignalAll() {
 AtomicPointer::AtomicPointer(void* v) {
   Release_Store(v);
 }
-
+//he_
+//Interlocked函数的工作原理取决于代码运行的CPU平台，如果是x86系列CPU，
+//那么Interlocked函数会在总线上维持一个硬件信号，这个信号会阻止其他CPU访问同一个内存地址。
+//我们必须确保传给这些函数的变量地址是经过对齐的，否则这些函数可能会失败。
+//对齐方式必须是2的整数幂次方
+//PVOID __cdecl InterlockedExchangePointer(
+//	__inout  PVOID volatile *Target, //指向要替换的地址值的指针
+//	__in     PVOID Value //替换的地址值
+//	);
 void* AtomicPointer::Acquire_Load() const {
   void * p = nullptr;
   InterlockedExchangePointer(&p, rep_);

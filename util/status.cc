@@ -7,7 +7,7 @@
 #include "leveldb/status.h"
 
 namespace leveldb {
-
+	//he_ lightSpot
 const char* Status::CopyState(const char* state) {
   uint32_t size;
   memcpy(&size, state, sizeof(size));

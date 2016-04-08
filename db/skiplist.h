@@ -37,7 +37,7 @@ class Arena;
 template<typename Key, class Comparator>
 class SkipList {
  private:
-  struct Node;
+  struct Node;//he_ declare a inner struct.
 
  public:
   // Create a new SkipList object that will use "cmp" for comparing keys,

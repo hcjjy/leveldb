@@ -16,7 +16,7 @@
 #include <time.h>
 #include <io.h>
 #else
-#include <dirent.h>
+//#include <dirent.h>
 #include <errno.h>
 #include <fcntl.h>
 #include <pthread.h>
