@@ -1,0 +1,5 @@
+*.unsuccessfulbuild
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
