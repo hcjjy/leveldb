@@ -67,7 +67,7 @@ bool Reader::ReadRecord(Slice* record, std::string* scratch) {
   record->clear();
   bool in_fragmented_record = false;
   // Record offset of the logical record that we're reading
-  // 0 is a dummy value to make compilers happy
+  // 0 is a dummy value to make compilers happy //he_dummy 虚拟的
   uint64_t prospective_record_offset = 0;
 
   Slice fragment;
@@ -183,11 +183,11 @@ unsigned int Reader::ReadPhysicalRecord(Slice* result) {
         // Last read was a full read, so this is a trailer to skip
         buffer_.clear();
         Status status = file_->Read(kBlockSize, &buffer_, backing_store_);
-        end_of_buffer_offset_ += buffer_.size();
-        if (!status.ok()) {
-          buffer_.clear();
-          ReportDrop(kBlockSize, status);
-          eof_ = true;
+		end_of_buffer_offset_ += buffer_.size();
+		if (!status.ok()) {
+			buffer_.clear();
+			ReportDrop(kBlockSize, status);
+			eof_ = true;
           return kEof;
         } else if (buffer_.size() < kBlockSize) {
           eof_ = true;
@@ -228,7 +228,7 @@ unsigned int Reader::ReadPhysicalRecord(Slice* result) {
     // Check crc
     if (checksum_) {
       uint32_t expected_crc = crc32c::Unmask(DecodeFixed32(header));
-      uint32_t actual_crc = crc32c::Value(header + 6, 1 + length);
+      uint32_t actual_crc = crc32c::Value(header + 6, 1 + length);//he_ Q: just why+6
       if (actual_crc != expected_crc) {
         // Drop the rest of the buffer since "length" itself may have
         // been corrupted and if we trust it, we could find some
@@ -242,7 +242,7 @@ unsigned int Reader::ReadPhysicalRecord(Slice* result) {
     }
 
     buffer_.remove_prefix(kHeaderSize + length);
-
+	//buffer的初始位置必须大于initial_offset_
     // Skip physical record that started before initial_offset_
     if (end_of_buffer_offset_ - buffer_.size() - kHeaderSize - length <
         initial_offset_) {

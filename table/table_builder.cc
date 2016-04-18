@@ -17,15 +17,15 @@
 namespace leveldb {
 
 struct TableBuilder::Rep {
-  Options options;
-  Options index_block_options;
-  WritableFile* file;
-  uint64_t offset;
-  Status status;
-  BlockBuilder data_block;
-  BlockBuilder index_block;
-  std::string last_key;
-  int64_t num_entries;
+  Options options;	//he_ 上层传进来的参数
+  Options index_block_options;	//he_ 同上，暂时没看到用处
+  WritableFile* file;	//he_ 写文件操作类
+  uint64_t offset;	//he_ offset文件偏移量，每写一块，就更新一次
+  Status status;	//he_ 操作类状态
+  BlockBuilder data_block;	//he_ 数据块
+  BlockBuilder index_block;	//he_ 索引块
+  std::string last_key;	//he_ 上一块最大的key
+  int64_t num_entries;	//he_ 该文件记录总数
   bool closed;          // Either Finish() or Abandon() has been called.
 
   // We do not emit the index entry for a block until we have seen the
@@ -117,7 +117,7 @@ void TableBuilder::Flush() {
   WriteBlock(&r->data_block, &r->pending_handle);
   if (ok()) {
     r->pending_index_entry = true;
-    r->status = r->file->Flush();
+    r->status = r->file->Flush();//he_ 再调用flush刷新到磁盘
   }
 }
 
@@ -154,7 +154,7 @@ void TableBuilder::WriteBlock(BlockBuilder* block, BlockHandle* handle) {
   }
   handle->set_offset(r->offset);
   handle->set_size(block_contents.size());
-  r->status = r->file->Append(block_contents);
+  r->status = r->file->Append(block_contents);//he_ 先写到用户态缓存中
   if (r->status.ok()) {
     char trailer[kBlockTrailerSize];
     trailer[0] = type;

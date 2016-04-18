@@ -31,7 +31,7 @@ struct LRUHandle {
   size_t charge;      // TODO(opt): Only allow uint32_t?
   size_t key_length;
   uint32_t refs;
-  uint32_t hash;      // Hash of key(); used for fast sharding and comparisons
+  uint32_t hash;      // Hash of key(); used for fast sharding and comparisons//he_ 分片和比较
   char key_data[1];   // Beginning of key
 
   Slice key() const {
@@ -214,7 +214,7 @@ Cache::Handle* LRUCache::Lookup(const Slice& key, uint32_t hash) {
   LRUHandle* e = table_.Lookup(key, hash);
   if (e != NULL) {
     e->refs++;
-    LRU_Remove(e);
+    LRU_Remove(e);//LRU最近最少使用，故访问了它就得将其移动到首端
     LRU_Append(e);
   }
   return reinterpret_cast<Cache::Handle*>(e);
@@ -231,10 +231,10 @@ Cache::Handle* LRUCache::Insert(
   MutexLock l(&mutex_);
 
   LRUHandle* e = reinterpret_cast<LRUHandle*>(
-      malloc(sizeof(LRUHandle)-1 + key.size()));
+      malloc(sizeof(LRUHandle)-1 + key.size()));//he_ Q -1的原因是什么
   e->value = value;
   e->deleter = deleter;
-  e->charge = charge;
+  e->charge = charge;//he_ 和key长度的区分
   e->key_length = key.size();
   e->hash = hash;
   e->refs = 2;  // One from LRUCache, one for the returned handle
@@ -274,7 +274,7 @@ class ShardedLRUCache : public Cache {
  private:
   LRUCache shard_[kNumShards];
   port::Mutex id_mutex_;
-  uint64_t last_id_;
+  uint64_t last_id_;//he_ can't understand
 
   static inline uint32_t HashSlice(const Slice& s) {
     return Hash(s.data(), s.size(), 0);
@@ -287,6 +287,7 @@ class ShardedLRUCache : public Cache {
  public:
   explicit ShardedLRUCache(size_t capacity)
       : last_id_(0) {
+		  //he_ Q why '+ (kNumShards - 1)'
     const size_t per_shard = (capacity + (kNumShards - 1)) / kNumShards;
     for (int s = 0; s < kNumShards; s++) {
       shard_[s].SetCapacity(per_shard);

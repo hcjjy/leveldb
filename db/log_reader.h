@@ -64,12 +64,13 @@ class Reader {
   char* const backing_store_;
   Slice buffer_;
   bool eof_;   // Last Read() indicated EOF by returning < kBlockSize
-
+  //he_ 上一条记录在log中的偏移量
   // Offset of the last record returned by ReadRecord.
   uint64_t last_record_offset_;
+  //he_ 当前块结尾在log中的偏移量
   // Offset of the first location past the end of buffer_.
   uint64_t end_of_buffer_offset_;
-
+  //he_ 用户设置在log中的初始偏移量
   // Offset at which to start looking for the first record to return
   uint64_t const initial_offset_;
 

@@ -2,7 +2,7 @@
 #include <string.h>
 #include <leveldb/db.h>
 #include <iostream>
-
+#include <db/memtable.h>
 //#include<vector>
 //#include <memory>
 
