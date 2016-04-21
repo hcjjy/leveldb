@@ -103,7 +103,7 @@ void TableBuilder::Add(const Slice& key, const Slice& value) {
   r->data_block.Add(key, value);
 
   const size_t estimated_block_size = r->data_block.CurrentSizeEstimate();
-  if (estimated_block_size >= r->options.block_size) {
+  if (estimated_block_size >= r->options.block_size) {	//根据上层参数确定写一块的大小
     Flush();
   }
 }

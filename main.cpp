@@ -80,7 +80,7 @@ int main(int argc,char** argv){
 	{
 		std::cout<<"equal!!\n";
 	}*/
-
+	std::cout<<sizeof(uint64_t)<<std::endl;
 	system("pause");
 	return 0;
 }

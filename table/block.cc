@@ -44,8 +44,8 @@ Block::~Block() {
 // "*value_length", respectively.  Will not derefence past "limit".
 //
 // If any errors are detected, returns NULL.  Otherwise, returns a
-// pointer to the key delta (just past the three decoded values).
 static inline const char* DecodeEntry(const char* p, const char* limit,
+// pointer to the key delta (just past the three decoded values).
                                       uint32_t* shared,
                                       uint32_t* non_shared,
                                       uint32_t* value_length) {
